@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/search")
 def search():
-    entity = request.args.get("entity_id")
+    member_id = request.args.get("member_id")
 
     conn = get_connection()
     cur = conn.cursor()
@@ -13,14 +13,15 @@ def search():
     cur.execute("""
         SELECT page_number, member_id, payer_name, copay
         FROM documents
-        WHERE entity_id = %s
-    """, (entity,))
+        WHERE member_id = %s
+    """, (member_id,))
 
     rows = cur.fetchall()
     cur.close()
     conn.close()
 
     return jsonify(rows)
+
 
 @app.route("/all")
 def all_records():
